@@ -1,0 +1,8 @@
+.chip_icon {
+  font-size: 14px;
+  width: 10px;
+  height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

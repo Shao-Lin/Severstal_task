@@ -1,0 +1,14 @@
+.page {
+  height: 100vh;
+  background: #f8f8f8;
+}
+.page_container {
+  width: 100%;
+  max-width: 700px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  gap: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

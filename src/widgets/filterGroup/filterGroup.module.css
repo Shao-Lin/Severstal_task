@@ -1,0 +1,39 @@
+.group_panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.search_filter {
+  width: 100%;
+}
+.select_filter {
+  display: flex;
+  gap: 15px;
+}
+
+.button_new_task {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.select_filter {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap; /* ✅ чтобы переносились */
+}
+
+@media (max-width: 600px) {
+  .select_filter {
+    flex-direction: column; /* ✅ в столбик */
+    gap: 12px;
+  }
+
+  .button_new_task {
+    justify-content: stretch;
+  }
+
+  .button_new_task button {
+    width: 100%; /* ✅ кнопка на всю ширину */
+  }
+}

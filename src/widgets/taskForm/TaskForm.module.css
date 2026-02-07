@@ -1,0 +1,47 @@
+/* корневой контейнер формы  */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* расстояние между секциями */
+}
+
+/* секция с полями */
+.fields {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* расстояние между полями */
+}
+
+/* секция с кнопками */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* оттеняем кнопку «Отмена» */
+.actions :is(button, .mantine-Button-root):first-child {
+  background: #f2f2f2;
+  color: #222;
+}
+.image {
+  max-width: 200px;
+  border-radius: 8px;
+}
+
+/* фиксируем кнопку «Сохранить» к правому нижнему углу на мобилках */
+@media (max-width: 480px) {
+  .actions {
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    padding: 1rem;
+    margin: -1rem -1rem 0; /* растягиваем до краёв */
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+  }
+}

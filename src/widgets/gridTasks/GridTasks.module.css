@@ -1,0 +1,24 @@
+.grid_container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding-top: 20px;
+  row-gap: 30px; /* 🔹 расстояние между строками */
+  column-gap: 20px; /* 🔹 расстояние между колонками */
+}
+
+@media (min-width: 1400px) {
+  .grid_container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (max-width: 900px) {
+  .grid_container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .grid_container {
+    grid-template-columns: 1fr;
+  }
+}
