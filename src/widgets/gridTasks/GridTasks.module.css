@@ -3,8 +3,9 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   padding-top: 20px;
-  row-gap: 30px; /* 🔹 расстояние между строками */
-  column-gap: 20px; /* 🔹 расстояние между колонками */
+  row-gap: 30px;
+  column-gap: 20px;
+  margin-bottom: 20px;
 }
 
 @media (min-width: 1400px) {

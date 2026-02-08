@@ -5,13 +5,10 @@ import { Button, FileInput, Textarea } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 
 import { Formik, Form } from "formik";
-import * as Yup from "yup";
 import { addTask, updateTask } from "@/entities/TaskItem/model/slice";
 import { useDispatch } from "react-redux";
 import dateHelper from "@/shared/lib/dateHelper";
 import { v4 as uuidv4 } from "uuid";
-
-// import type { TaskStatus, TaskCategory } from "@/entities/TaskItem/model/types";
 import { useNavigate } from "react-router-dom";
 import {
   categoryOptions,
@@ -19,33 +16,8 @@ import {
   TaskFormProps,
   TaskFormValues,
 } from "./types";
-import { fileToBase64 } from "@/shared/lib/fileHelper";
-
-/* ───── Опции для селектов ───── */
-
-/* ───── Yup‑схема валидации ───── */
-const schema = Yup.object({
-  title: Yup.string().required("Введите название"),
-  description: Yup.string().required("Описание обязательно"),
-  status: Yup.string(),
-  category: Yup.string(),
-  image: Yup.string(),
-});
-
-const handleImageChange =
-  (setFieldValue: (field: string, value: unknown) => void) =>
-  async (file: File | null) => {
-    // ✅ чтобы FileInput показал имя
-    setFieldValue("imageFile", file);
-
-    if (!file) {
-      setFieldValue("image", undefined);
-      return;
-    }
-
-    const base64 = await fileToBase64(file);
-    setFieldValue("image", base64);
-  };
+import { handleImageChange } from "@/features/createTask/lib/handleImageChange";
+import { schema } from "./validation";
 
 const TaskForm = ({ task }: TaskFormProps) => {
   const dispatch = useDispatch();
@@ -89,25 +61,26 @@ const TaskForm = ({ task }: TaskFormProps) => {
     >
       {({ values, errors, touched, setFieldValue, handleSubmit }) => (
         <Form onSubmit={handleSubmit} className={styles.main}>
-          {/* Левая колонка */}
           <section className={styles.fields}>
-            {/* Заголовок задачи */}
             <SearchInput
               value={values.title}
               placeholder="Название задачи"
               onChange={(v) => setFieldValue("title", v)}
               error={touched.title && errors.title}
             />
-            {/* Описание */}
+
             <Textarea
               placeholder="Опишите задачу"
               value={values.description}
               onChange={(e) =>
                 setFieldValue("description", e.currentTarget.value)
               }
+              autosize
+              minRows={1}
+              maxRows={15}
               error={touched.description && errors.description}
             />
-            {/* Статус */}
+
             <SelectInput
               value={values.status}
               data={statusOptions}
@@ -115,7 +88,7 @@ const TaskForm = ({ task }: TaskFormProps) => {
               onChange={(v) => setFieldValue("status", v)}
               error={touched.status && errors.status}
             />
-            {/* Категория */}
+
             <SelectInput
               value={values.category}
               data={categoryOptions}
@@ -127,7 +100,7 @@ const TaskForm = ({ task }: TaskFormProps) => {
               accept="image/png,image/jpeg"
               clearable
               placeholder="Upload image"
-              value={values.imageFile} // ✅ теперь отображается выбранный файл
+              value={values.imageFile}
               onChange={handleImageChange(setFieldValue)}
               error={touched.image ? errors.image : undefined}
             />
@@ -135,7 +108,6 @@ const TaskForm = ({ task }: TaskFormProps) => {
               <img className={styles.image} src={values.image} alt="preview" />
             )}
 
-            {/* Дата дедлайна */}
             <DatePickerInput
               placeholder="Выберите день"
               value={values.date}
@@ -144,7 +116,6 @@ const TaskForm = ({ task }: TaskFormProps) => {
             />
           </section>
 
-          {/* Правая колонка (кнопки) */}
           <section className={styles.actions}>
             <Button onClick={() => navigate("/")} variant="default">
               Отмена

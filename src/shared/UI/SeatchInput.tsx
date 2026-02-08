@@ -1,8 +1,8 @@
 import { CloseButton, Input } from "@mantine/core";
 
 type SearchInputProps = {
-  value: string; // ← то самое value
-  onChange: (val: string) => void; // ← функция, получающая v
+  value: string;
+  onChange: (val: string) => void;
   placeholder?: string;
   error?: string | false | undefined;
 };

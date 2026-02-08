@@ -11,7 +11,6 @@ export const store = configureStore({
   },
 });
 
-/* ---- ПERSIST ---- */
 let prev = store.getState().tasks.list;
 store.subscribe(() => {
   const curr = store.getState().tasks.list;

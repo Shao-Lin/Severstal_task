@@ -18,19 +18,17 @@ export default defineConfig([
     },
     rules: {
       ...js.configs.recommended.rules,
-      "react/react-in-jsx-scope": "off", // 👈 отключаем требование импорта React
+      "react/react-in-jsx-scope": "off",
     },
   },
 
-  // TypeScript support
   tseslint.configs.recommended,
 
-  // React recommended (flat config)
   {
     ...pluginReact.configs.flat.recommended,
     rules: {
       ...pluginReact.configs.flat.recommended.rules,
-      "react/react-in-jsx-scope": "off", // на всякий случай продублируем и здесь
+      "react/react-in-jsx-scope": "off",
     },
   },
 ]);

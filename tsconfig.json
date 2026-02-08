@@ -1,26 +1,21 @@
 {
   "compilerOptions": {
-    /* базовые настройки */
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Node",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
 
-    /* React */
     "jsx": "react-jsx",
     "isolatedModules": true,
 
-    /* строгий режим (можно ослабить) */
     "strict": true,
     "noImplicitOverride": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
 
-    /* ES‑совместимость и импорты */
-    "esModuleInterop": true, // чинит default‑импорт CSS‑модулей
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
 
-    /* алиасы */
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
@@ -32,7 +27,6 @@
       "@app/*": ["src/app/*"]
     },
 
-    /* Vite типы и JSON‑импорты */
     "types": ["vite/client"],
     "resolveJsonModule": true
   },

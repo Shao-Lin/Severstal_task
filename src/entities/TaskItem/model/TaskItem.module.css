@@ -13,8 +13,8 @@
     box-shadow 0.2s ease;
 }
 .task:hover {
-  transform: translateY(-5px); /* поднимаем на 5px вверх */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* усиливаем тень */
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 .task_container {
   padding: 20px 20px 0 20px;
@@ -31,23 +31,28 @@
   font-size: 16px;
   font-weight: 600;
   margin: 0;
-  display: -webkit-box; /* нужно для поддержки webkit */
+  display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2; /* обрезать после 1 строки */
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 
-  overflow: hidden; /* добавь */
-  text-overflow: ellipsis; /* можно оставить */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .description {
   font-size: 14px;
   opacity: 80%;
   margin-top: 5px;
   margin-bottom: 15px;
-  display: -webkit-box; /* нужно для поддержки webkit */
+
+  display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3; /* обрезать после 1 строки */
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+
   overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
 }
 .top_section {
   display: flex;
@@ -99,7 +104,7 @@
 
 @media (max-width: 600px) {
   .task {
-    height: auto; /* ✅ на мобилке пусть растёт */
-    min-height: 220px; /* ✅ но не слишком маленькая */
+    height: auto;
+    min-height: 220px;
   }
 }

@@ -1,10 +1,16 @@
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import TaskChip from "../UI/TaskChip";
 import styles from "./TaskItem.module.css";
-import { Clock } from "lucide-react";
-// import { FaCircleHalfStroke, FaCircle } from "react-icons/fa6";
-// import { GoDash } from "react-icons/go";
-import { Dot } from "lucide-react";
+import {
+  ChartNoAxesGantt,
+  Clock,
+  House,
+  Plane,
+  Presentation,
+  Printer,
+  Star,
+} from "lucide-react";
+
 import type { Task } from "./types";
 import { useNavigate } from "react-router-dom";
 import { FaTrashAlt } from "react-icons/fa";
@@ -12,23 +18,30 @@ import { deleteTask } from "./slice";
 import { useAppDispatch } from "@/shared/lib/hooks";
 
 const TaskItem = ({ id, title, description, category, status, date }: Task) => {
-  const [icon, setIcon] = useState<React.ReactElement>(<Clock />);
+  const [categoryIcon, setCategoryIcon] = useState<ReactElement>(<Clock />);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   switch (status) {
-  //     case "Favorite":
-  //       setIcon(<Clock />);
-  //       break;
-  //     case "In Progress":
-  //       setIcon(<FaCircleHalfStroke />);
-  //       break;
-  //     case "Done":
-  //       setIcon(<FaCircle />);
-  //       break;
-  //   }
-  // }, [status]);
+  useEffect(() => {
+    switch (category) {
+      case "Home":
+        setCategoryIcon(<House />);
+        break;
+      case "Office":
+        setCategoryIcon(<Printer />);
+        break;
+      case "Trip":
+        setCategoryIcon(<Plane />);
+        break;
+      case "Project":
+        setCategoryIcon(<Presentation />);
+        break;
+      case "Other":
+        setCategoryIcon(<ChartNoAxesGantt />);
+        break;
+    }
+  }, [status]);
+
   return (
     <article className={styles.task}>
       <div className={styles.task_container}>
@@ -45,8 +58,8 @@ const TaskItem = ({ id, title, description, category, status, date }: Task) => {
 
           <p className={styles.description}>{description}</p>
           <div className={styles.chip_container}>
-            {category && <TaskChip title={category} icon={<Dot />} />}
-            {status && <TaskChip title={status} icon={icon} />}
+            {status && <TaskChip title={status} icon={<Star />} />}
+            {category && <TaskChip title={category} icon={categoryIcon} />}
           </div>
         </div>
       </div>

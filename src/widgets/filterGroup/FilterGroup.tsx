@@ -22,6 +22,7 @@ const FilterGroup = () => {
     "Home",
     "Office",
     "Trip",
+    "Project",
     "Other",
   ];
   const navigate = useNavigate();

@@ -8,9 +8,8 @@ const dateHelper = () => {
   };
 
   const formatted = date.toLocaleDateString("en-US", options);
-  // Пример: "Jun 14, 2024"
 
-  const result = formatted.replace(",", ""); // "Jun 14 2024"
+  const result = formatted.replace(",", "");
 
   return result;
 };

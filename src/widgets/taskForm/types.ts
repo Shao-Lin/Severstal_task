@@ -6,9 +6,9 @@ export type TaskFormValues = {
   description: string;
   status?: TaskStatus;
   category?: TaskCategory;
-  date: string; // у тебя сейчас строка
-  image?: string; // base64
-  imageFile: File | null; // чтобы FileInput показывал выбранный файл
+  date: string;
+  image?: string;
+  imageFile: File | null;
 };
 
 type TaskDraft = Omit<TaskFormValues, "imageFile">;

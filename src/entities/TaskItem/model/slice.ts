@@ -1,17 +1,18 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Task } from "./types";
-
-// src/entities/task/model/slice.ts
 import type { RootState } from "../../../app/store";
+import { seedTasks } from "./mock";
 
 const LS_KEY = "tasks";
 
 const loadInitial = (): Task[] => {
   try {
     const raw = localStorage.getItem(LS_KEY);
-    return raw ? (JSON.parse(raw) as Task[]) : [];
+    if (!raw) return seedTasks;
+    const parsed = JSON.parse(raw) as Task[];
+    return parsed.length ? parsed : seedTasks;
   } catch {
-    return [];
+    return seedTasks;
   }
 };
 
@@ -35,7 +36,6 @@ const tasksSlice = createSlice({
     deleteTask(state, { payload }: PayloadAction<string>) {
       state.list = state.list.filter((t) => t.id !== payload);
     },
-    /* пригодится для синхронизации вкладок */
     replaceAll(state, { payload }: PayloadAction<Task[]>) {
       state.list = payload;
     },

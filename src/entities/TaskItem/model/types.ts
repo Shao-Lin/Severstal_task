@@ -8,5 +8,6 @@ export interface Task {
   category?: TaskCategory;
   status?: TaskStatus;
   image?: string;
-  date: string; // ISO‑строка
+  imageName?: string;
+  date: string;
 }
