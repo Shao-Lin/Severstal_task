@@ -1,8 +1,8 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import MainPage from "@/pages/mainPage/MainPage";
-import CreatePage from "@/pages/changePages/CreatePage";
-import EditPage from "@/pages/changePages/EditPage";
+import MainPage from "@/pages/main/ui/MainPage";
+import CreatePage from "@/pages/createTask/ui/CreatePage";
+import EditPage from "@/pages/editTask/ui/EditPage";
 
 function App() {
   return (

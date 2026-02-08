@@ -11,3 +11,12 @@ export interface Task {
   imageName?: string;
   date: string;
 }
+
+export interface TasksState {
+  list: Task[];
+}
+
+export type ChipProps = {
+  title: string;
+  icon: React.ReactElement;
+};

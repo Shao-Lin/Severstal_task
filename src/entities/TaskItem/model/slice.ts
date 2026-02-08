@@ -1,24 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Task } from "./types";
+import type { Task, TasksState } from "./types";
 import type { RootState } from "../../../app/store";
-import { seedTasks } from "./mock";
-
-const LS_KEY = "tasks";
-
-const loadInitial = (): Task[] => {
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return seedTasks;
-    const parsed = JSON.parse(raw) as Task[];
-    return parsed.length ? parsed : seedTasks;
-  } catch {
-    return seedTasks;
-  }
-};
-
-interface TasksState {
-  list: Task[];
-}
+import { loadInitial } from "../lib/storage";
 
 const initialState: TasksState = { list: loadInitial() };
 
