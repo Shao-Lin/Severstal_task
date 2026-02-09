@@ -14,12 +14,7 @@ import { useNavigate } from "react-router-dom";
 import dateHelper from "@/shared/lib/dateHelper";
 import { v4 as uuidv4 } from "uuid";
 
-import {
-  categoryOptions,
-  statusOptions,
-  TaskFormProps,
-  TaskFormValues,
-} from "../../model/types";
+import { TaskFormProps, TaskFormValues } from "../../model/types";
 
 import { handleImageChange } from "@/features/task/upsert/lib/handleImageChange";
 import { schema } from "../../model/validation";
@@ -28,6 +23,10 @@ import "@mantine/tiptap/styles.css";
 import { normalizeHtml } from "../../lib/normalizeHtml";
 import { useTaskEditor } from "../../lib/createEditor";
 import { ReachTextField } from "../RichTextField/RichTextField";
+import {
+  categoryOptions,
+  statusOptions,
+} from "@/entities/TaskItem/const/optionsConst";
 
 const TaskForm = ({ task }: TaskFormProps) => {
   const dispatch = useDispatch();
@@ -92,7 +91,7 @@ const TaskForm = ({ task }: TaskFormProps) => {
             <section className={styles.fields}>
               <SearchInput
                 value={values.title}
-                placeholder="Название задачи"
+                placeholder="Название заметки"
                 onChange={(v) => setFieldValue("title", v)}
                 error={touched.title && errors.title}
               />

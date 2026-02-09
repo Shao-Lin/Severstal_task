@@ -19,15 +19,6 @@ export type TaskFormProps = {
   task?: TaskDraft;
 };
 
-export const statusOptions: TaskStatus[] = ["Favorite"];
-export const categoryOptions: TaskCategory[] = [
-  "Home",
-  "Office",
-  "Trip",
-  "Project",
-  "Other",
-];
-
 type SetFieldValueStrict<V> = <K extends keyof V>(
   field: K,
   value: V[K],

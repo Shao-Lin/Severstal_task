@@ -11,20 +11,15 @@ import {
 import { TaskCategory, TaskStatus } from "@/entities/TaskItem/model/types";
 import { Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import {
+  categoryOptions,
+  statusOptions,
+} from "@/entities/TaskItem/const/optionsConst";
 
 const FilterGroup = () => {
   const dispatch = useAppDispatch();
   const { search, status, category } = useAppSelector(selectTaskFilters);
 
-  const statusOptions: (TaskStatus | "")[] = ["", "Favorite"];
-  const categoryOptions: (TaskCategory | "")[] = [
-    "",
-    "Home",
-    "Office",
-    "Trip",
-    "Project",
-    "Other",
-  ];
   const navigate = useNavigate();
 
   return (
