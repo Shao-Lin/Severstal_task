@@ -2,11 +2,7 @@ import { RichTextEditor } from "@mantine/tiptap";
 import styles from "./ReachTextField.module.css";
 import { ReachTextFieldProps } from "../../model/types";
 
-export const ReachTextField = ({
-  touched,
-  errors,
-  editor,
-}: ReachTextFieldProps) => {
+export const ReachTextField = ({ errors, editor }: ReachTextFieldProps) => {
   if (!editor) return null;
 
   return (
@@ -27,9 +23,7 @@ export const ReachTextField = ({
         <RichTextEditor.Content />
       </RichTextEditor>
 
-      {touched.description && errors.description && (
-        <div className={styles.errorText}>{errors.description}</div>
-      )}
+      {errors?.description?.message && <p>{errors.description.message}</p>}
     </div>
   );
 };

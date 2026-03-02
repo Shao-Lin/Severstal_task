@@ -1,6 +1,6 @@
 import { TaskCategory, TaskStatus } from "@/entities/TaskItem/model/types";
 import { Editor } from "@tiptap/react";
-import { FormikErrors, FormikTouched } from "formik";
+import { FieldErrors } from "react-hook-form";
 
 export type TaskFormValues = {
   id: string;
@@ -32,6 +32,5 @@ export type UseTaskEditorArgs = {
 
 export type ReachTextFieldProps = {
   editor: Editor | null;
-  touched: FormikTouched<TaskFormValues>;
-  errors: FormikErrors<TaskFormValues>;
+  errors: FieldErrors<TaskFormValues>;
 };

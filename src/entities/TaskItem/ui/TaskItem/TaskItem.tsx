@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement } from "react";
 import TaskChip from "../TaskChip/TaskChip";
 import styles from "./TaskItem.module.css";
 import {
@@ -11,36 +11,23 @@ import {
   Star,
 } from "lucide-react";
 import DOMPurify from "dompurify";
-import type { Task } from "../../model/types";
+import type { Task, TaskCategory } from "../../model/types";
 import { useNavigate } from "react-router-dom";
 import { FaTrashAlt } from "react-icons/fa";
 import { deleteTask } from "../../model/slice";
 import { useAppDispatch } from "@/shared/lib/hooks";
 
 const TaskItem = ({ id, title, description, category, status, date }: Task) => {
-  const [categoryIcon, setCategoryIcon] = useState<ReactElement>(<Clock />);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    switch (category) {
-      case "Home":
-        setCategoryIcon(<House />);
-        break;
-      case "Office":
-        setCategoryIcon(<Printer />);
-        break;
-      case "Trip":
-        setCategoryIcon(<Plane />);
-        break;
-      case "Project":
-        setCategoryIcon(<Presentation />);
-        break;
-      case "Other":
-        setCategoryIcon(<ChartNoAxesGantt />);
-        break;
-    }
-  }, [category]);
+  const categoryIconMapper: Record<TaskCategory, ReactElement> = {
+    Home: <House />,
+    Office: <Printer />,
+    Trip: <Plane />,
+    Project: <Presentation />,
+    Other: <ChartNoAxesGantt />,
+  };
 
   return (
     <article className={styles.task}>
@@ -64,7 +51,12 @@ const TaskItem = ({ id, title, description, category, status, date }: Task) => {
           />
           <div className={styles.chip_container}>
             {status && <TaskChip title={status} icon={<Star />} />}
-            {category && <TaskChip title={category} icon={categoryIcon} />}
+            {category && (
+              <TaskChip
+                title={category}
+                icon={category ? categoryIconMapper[category] : <Clock />}
+              />
+            )}
           </div>
         </div>
       </div>

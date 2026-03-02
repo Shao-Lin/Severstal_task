@@ -1,7 +1,7 @@
 import { TaskCategory, TaskStatus } from "@/entities/TaskItem/model/types";
 
-export const statusOptions: (TaskStatus | "")[] = ["", "Favorite"];
-export const categoryOptions: (TaskCategory | "")[] = [
+export const STATUS_OPTIONS: (TaskStatus | "")[] = ["", "Favorite"];
+export const CATEGORY_OPTIONS: (TaskCategory | "")[] = [
   "",
   "Home",
   "Office",

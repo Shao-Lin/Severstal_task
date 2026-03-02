@@ -12,9 +12,9 @@ import { TaskCategory, TaskStatus } from "@/entities/TaskItem/model/types";
 import { Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import {
-  categoryOptions,
-  statusOptions,
-} from "@/entities/TaskItem/const/optionsConst";
+  CATEGORY_OPTIONS,
+  STATUS_OPTIONS,
+} from "@/entities/TaskItem/constants/optionsConst";
 
 const FilterGroup = () => {
   const dispatch = useAppDispatch();
@@ -34,14 +34,14 @@ const FilterGroup = () => {
       <div className={styles.select_filter}>
         <SelectInput
           value={status}
-          data={statusOptions}
+          data={STATUS_OPTIONS}
           placeholder={"Status"}
           onChange={(v) => dispatch(setStatus(v as TaskStatus | ""))}
         />
 
         <SelectInput
           value={category}
-          data={categoryOptions}
+          data={CATEGORY_OPTIONS}
           placeholder={"Category"}
           onChange={(v) => dispatch(setCategory(v as TaskCategory | ""))}
         />

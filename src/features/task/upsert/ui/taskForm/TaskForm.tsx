@@ -1,43 +1,42 @@
 import { useEffect } from "react";
-import { Formik, Form } from "formik";
 import { Button, FileInput } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
-
-import SearchInput from "@/shared/ui/SearchInput/SearchInput";
-import SelectInput from "@/shared/ui/SelectInput/SelectInput";
-import styles from "./TaskForm.module.css";
-
-import { addTask, updateTask } from "@/entities/TaskItem/model/slice";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import SearchInput from "@/shared/ui/SearchInput/SearchInput";
+import SelectInput from "@/shared/ui/SelectInput/SelectInput";
+import { ReachTextField } from "../RichTextField/RichTextField";
+
+import styles from "./TaskForm.module.css";
+
+import { addTask, updateTask } from "@/entities/TaskItem/model/slice";
+import {
+  CATEGORY_OPTIONS,
+  STATUS_OPTIONS,
+} from "@/entities/TaskItem/constants/optionsConst";
+
 import dateHelper from "@/shared/lib/dateHelper";
-import { v4 as uuidv4 } from "uuid";
-
-import { TaskFormProps, TaskFormValues } from "../../model/types";
-
-import { handleImageChange } from "@/features/task/upsert/lib/handleImageChange";
-import { schema } from "../../model/validation";
-import "@mantine/core/styles.css";
-import "@mantine/tiptap/styles.css";
+import { fileToBase64 } from "@/shared/lib/fileHelper";
 import { normalizeHtml } from "../../lib/normalizeHtml";
 import { useTaskEditor } from "../../lib/createEditor";
-import { ReachTextField } from "../RichTextField/RichTextField";
-import {
-  categoryOptions,
-  statusOptions,
-} from "@/entities/TaskItem/const/optionsConst";
+
+import { schema, FormData } from "../../model/validation";
+import { TaskFormProps } from "../../model/types";
+
+import "@mantine/core/styles.css";
+import "@mantine/tiptap/styles.css";
 
 const TaskForm = ({ task }: TaskFormProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const initialValues: TaskFormValues = task
+  const defaultValues: FormData = task
     ? {
         ...task,
-        status: task.status ?? undefined,
-        category: task.category ?? undefined,
-        image: task.image ?? undefined,
         imageFile: null,
       }
     : {
@@ -51,111 +50,168 @@ const TaskForm = ({ task }: TaskFormProps) => {
         imageFile: null,
       };
 
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    mode: "onChange",
+    defaultValues,
+  });
+
+  const values = watch();
+
+  // 🔁 если редактируем существующую задачу
+  useEffect(() => {
+    reset(defaultValues);
+  }, [task]);
+
+  // 📝 Rich text editor
+  const editor = useTaskEditor({
+    description: values.description,
+    setFieldValue: (field: string, value: unknown) =>
+      setValue(field as keyof FormData, value as never),
+  });
+
+  useEffect(() => {
+    if (!editor) return;
+
+    const current = normalizeHtml(editor.getHTML());
+    const next = normalizeHtml(values.description || "");
+
+    if (current !== next) {
+      editor.commands.setContent(next || "<p></p>");
+    }
+  }, [editor, values.description]);
+
+  // 🖼 обработка изображения
+  const handleImageChange = async (file: File | null) => {
+    setValue("imageFile", file);
+
+    if (!file) {
+      setValue("image", undefined);
+      return;
+    }
+
+    const base64 = await fileToBase64(file);
+    setValue("image", base64);
+  };
+
+  // 🚀 submit
+  const onSubmit = (data: FormData) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { imageFile, ...taskPayload } = data;
+
+    if (task) {
+      dispatch(updateTask(taskPayload));
+    } else {
+      dispatch(addTask(taskPayload));
+    }
+
+    navigate("/");
+  };
   return (
-    <Formik<TaskFormValues>
-      initialValues={initialValues}
-      validationSchema={schema}
-      enableReinitialize
-      onSubmit={(values) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { imageFile: _imageFile, ...taskPayload } = values;
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.main}>
+      <section className={styles.fields}>
+        {/* TITLE */}
+        <Controller
+          name="title"
+          control={control}
+          render={({ field }) => (
+            <SearchInput
+              value={field.value}
+              placeholder="Название заметки"
+              onChange={field.onChange}
+              error={errors.title?.message}
+            />
+          )}
+        />
 
-        if (task) {
-          dispatch(updateTask(taskPayload));
-        } else {
-          dispatch(addTask(taskPayload));
-        }
+        {/* DESCRIPTION */}
+        <ReachTextField editor={editor} errors={errors} />
 
-        navigate("/");
-      }}
-    >
-      {({ values, errors, touched, setFieldValue, handleSubmit }) => {
-        const editor = useTaskEditor({
-          description: values.description,
-          setFieldValue: setFieldValue,
-        });
+        {/* STATUS */}
+        <Controller
+          name="status"
+          control={control}
+          render={({ field }) => (
+            <SelectInput
+              value={field.value}
+              data={STATUS_OPTIONS}
+              placeholder="Статус"
+              onChange={field.onChange}
+              error={errors.status?.message}
+            />
+          )}
+        />
 
-        useEffect(() => {
-          if (!editor) return;
+        {/* CATEGORY */}
+        <Controller
+          name="category"
+          control={control}
+          render={({ field }) => (
+            <SelectInput
+              value={field.value}
+              data={CATEGORY_OPTIONS}
+              placeholder="Категория"
+              onChange={field.onChange}
+              error={errors.category?.message}
+            />
+          )}
+        />
 
-          const current = normalizeHtml(editor.getHTML());
-          const next = normalizeHtml(values.description || "");
+        {/* IMAGE */}
+        <Controller
+          name="imageFile"
+          control={control}
+          render={({ field }) => (
+            <FileInput
+              accept="image/png,image/jpeg"
+              clearable
+              placeholder="Upload image"
+              value={field.value ?? null}
+              onChange={(file) => {
+                field.onChange(file);
+                handleImageChange(file);
+              }}
+              error={errors.imageFile?.message}
+            />
+          )}
+        />
 
-          if (current !== next) {
-            editor.commands.setContent(next || "<p></p>");
-          }
-        }, [editor, values.description]);
+        {values.image && (
+          <img className={styles.image} src={values.image} alt="preview" />
+        )}
 
-        return (
-          <Form onSubmit={handleSubmit} className={styles.main}>
-            <section className={styles.fields}>
-              <SearchInput
-                value={values.title}
-                placeholder="Название заметки"
-                onChange={(v) => setFieldValue("title", v)}
-                error={touched.title && errors.title}
-              />
+        {/* DATE */}
+        <Controller
+          name="date"
+          control={control}
+          render={({ field }) => (
+            <DatePickerInput
+              placeholder="Выберите день"
+              value={field.value}
+              valueFormat="MMM D YYYY"
+              disabled
+            />
+          )}
+        />
+      </section>
 
-              <ReachTextField
-                touched={touched}
-                errors={errors}
-                editor={editor}
-              />
+      <section className={styles.actions}>
+        <Button onClick={() => navigate("/")} variant="default">
+          Отмена
+        </Button>
 
-              <SelectInput
-                value={values.status}
-                data={statusOptions}
-                placeholder="Статус"
-                onChange={(v) => setFieldValue("status", v)}
-                error={touched.status && errors.status}
-              />
-
-              <SelectInput
-                value={values.category}
-                data={categoryOptions}
-                placeholder="Категория"
-                onChange={(v) => setFieldValue("category", v)}
-                error={touched.category && errors.category}
-              />
-
-              <FileInput
-                accept="image/png,image/jpeg"
-                clearable
-                placeholder="Upload image"
-                value={values.imageFile}
-                onChange={handleImageChange(setFieldValue)}
-                error={touched.image ? errors.image : undefined}
-              />
-
-              {values.image && (
-                <img
-                  className={styles.image}
-                  src={values.image}
-                  alt="preview"
-                />
-              )}
-
-              <DatePickerInput
-                placeholder="Выберите день"
-                value={values.date}
-                valueFormat="MMM D YYYY"
-                disabled={true}
-              />
-            </section>
-
-            <section className={styles.actions}>
-              <Button onClick={() => navigate("/")} variant="default">
-                Отмена
-              </Button>
-
-              <Button variant="filled" color="rgba(0,0,0,1)" type="submit">
-                Сохранить
-              </Button>
-            </section>
-          </Form>
-        );
-      }}
-    </Formik>
+        <Button type="submit" variant="filled" color="rgba(0,0,0,1)">
+          Сохранить
+        </Button>
+      </section>
+    </form>
   );
 };
 

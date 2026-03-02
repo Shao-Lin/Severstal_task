@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { tasksReducer } from "../entities/TaskItem/model/slice";
+import { tasksReducer } from "@/entities/TaskItem/model/slice";
 import { taskFiltersReducer } from "@/features/task/filter/model/slice";
 
 const LS_KEY = "tasks";

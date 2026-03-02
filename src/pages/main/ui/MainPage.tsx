@@ -1,6 +1,6 @@
-import FilterGroup from "../../../widgets/filterGroup/ui/FilterGroup";
-import GridTasks from "../../../widgets/gridTasks/ui/GridTasks";
-import Header from "../../../widgets/MainHeader/ui/Header";
+import FilterGroup from "@widgets/filterGroup/ui/FilterGroup";
+import GridTasks from "@widgets/gridTasks/ui/GridTasks";
+import Header from "@widgets/MainHeader/ui/Header";
 import styles from "./MainPage.module.css";
 
 const MainPage = () => {

@@ -1,4 +1,4 @@
-import TaskItem from "../../../entities/TaskItem/ui/TaskItem/TaskItem";
+import TaskItem from "@entities/TaskItem/ui/TaskItem/TaskItem";
 import styles from "./GridTasks.module.css";
 import { selectFilteredTasks } from "@/features/task/filter/model/selectors";
 import { useAppSelector } from "@/shared/lib/hooks";
